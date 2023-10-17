@@ -1,10 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
+
+	"github.com/dabkoa/golang-server/utils"
 )
 
 var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
@@ -15,7 +18,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 	if err != nil {
 		http.Redirect(w, r, "/edit/"+title, http.StatusNotFound)
 	}
-	log.Printf("Displaying {Title:%s, Body:%s...}", title, p.Body[:10])
+	log.Printf("Displaying \"%s\"", title)
 	renderTemplate(w, "view", p)
 }
 
@@ -57,12 +60,22 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 	}
 }
 
+var config utils.Config
+
+func init() {
+	err := config.Load("resources/config.json")
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
+
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
 
-	log.Println("Application started!")
+	log.Printf("Application \"%s\" started!\n", config.ApplicationName)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", config.Port), nil))
 }
