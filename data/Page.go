@@ -1,4 +1,4 @@
-package main
+package data
 
 import (
 	"os"
@@ -9,13 +9,13 @@ type Page struct {
 	Body  []byte
 }
 
-func (p *Page) save() error {
-	filename := "data/" + p.Title + ".txt"
+func (p *Page) Save() error {
+	filename := "resources/data/" + p.Title + ".txt"
 	return os.WriteFile(filename, p.Body, 0600)
 }
 
-func loadPage(title string) (*Page, error) {
-	filename := "data/" + title + ".txt"
+func LoadPage(title string) (*Page, error) {
+	filename := "resources/data/" + title + ".txt"
 	body, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
