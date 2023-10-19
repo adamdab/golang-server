@@ -8,7 +8,7 @@ import (
 	"github.com/dabkoa/golang-server/data"
 )
 
-var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
+var templates = template.Must(template.ParseFiles("resources/templates/edit.html", "resources/templates/view.html"))
 
 func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 	p, err := data.LoadPage(title)

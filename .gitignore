@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+
+# vs code configration
+settings.json
+
+# data from service
+resources/data/
